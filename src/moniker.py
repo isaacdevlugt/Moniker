@@ -1,10 +1,13 @@
 import numpy as np
 
-class Sampler():
+
+class Sampler:
     def __init__(self, weights):
         if type(weights).__module__ != np.__name__:
             weights = np.array(weights, dtype=np.float64)
-        assert len(weights.shape) == 1, "Please ensure that the input is one-dimensional."
+        assert (
+            len(weights.shape) == 1
+        ), "Please ensure that the input is one-dimensional."
         assert weights.shape[0] > 2, "Using this is pointless!"
 
         self.normalization = np.sum(weights, dtype=np.float64)
@@ -14,23 +17,21 @@ class Sampler():
         self.make_table()
 
     def __repr__(self):
-        return (
-            f"AliasTable(probabilities={self.weights})"
-        )
+        return f"AliasTable(probabilities={self.weights})"
 
     def make_table(self):
-        """Make the Alias table required for sampling."""        
+        """Make the Alias table required for sampling."""
         over = []
         under = []
 
         scaled_weights = self.weights / self.factor
 
-        for i,weight in enumerate(scaled_weights):
+        for i, weight in enumerate(scaled_weights):
             if weight >= 1.0:
                 over.append(i)
             else:
                 under.append(i)
-        
+
         alias = np.zeros(self.N, dtype=np.int64)
         cutoffs = np.zeros(self.N)
 
@@ -41,7 +42,9 @@ class Sampler():
             cutoffs[under_idx] = scaled_weights[under_idx]
             alias[under_idx] = over_idx
 
-            scaled_weights[over_idx] = scaled_weights[over_idx] + scaled_weights[under_idx] - 1.0
+            scaled_weights[over_idx] = (
+                scaled_weights[over_idx] + scaled_weights[under_idx] - 1.0
+            )
 
             if scaled_weights[over_idx] >= 1.0:
                 over.append(over_idx)
@@ -50,7 +53,7 @@ class Sampler():
 
         while over:
             cutoffs[over.pop()] = 1.0
-        
+
         while under:
             cutoffs[under.pop()] = 1.0
 
@@ -61,13 +64,13 @@ class Sampler():
         """Draw samples from the Alias table."""
         samples = np.zeros(num_samples, dtype=np.int64)
 
-        for s in range(num_samples): 
+        for s in range(num_samples):
             u = np.random.rand()
             i = np.random.randint(self.N)
 
             if u <= self.cutoffs[i]:
                 samples[s] = i
             else:
-                samples[s] = self.alias[i]                        
+                samples[s] = self.alias[i]
 
         return samples
