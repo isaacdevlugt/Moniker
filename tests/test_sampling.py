@@ -6,7 +6,7 @@ from moniker import sample
 
 class TestSampling(unittest.TestCase):
     def test_against_random_choice(self):
-        num_samples = 100_000
+        num_samples = 10_000_000
         weights = np.array([4, 1, 5, 2])  # unnormalized probabilities
 
         np_samples = np.zeros(num_samples)
