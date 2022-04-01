@@ -2,7 +2,7 @@ ipykernel
 nbsphinx
 nbsphinx_link
 pandas
-numpy>=1.9.3
+numpy
 matplotlib
 ipynb
 scipy
