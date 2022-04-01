@@ -1,4 +1,5 @@
 import unittest
+from wsgiref.handlers import IISCGIHandler
 import numpy as np
 
 from moniker import sample
