@@ -3,7 +3,7 @@ nbsphinx
 nbsphinx_link
 pandas
 pandoc
-numpy
+numpy>=1.14.5
 matplotlib
 ipynb
 scipy
