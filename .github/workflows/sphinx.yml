@@ -5,8 +5,10 @@ on:
     branches: [ main ]
 
 jobs:
-  upgrade:
+  Build documentation:
     runs-on: ubuntu-latest
+    env: 
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
@@ -14,12 +16,35 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: "Upgrade pip, install requirements"
+      - name: Upgrade pip, install requirements
         run: |
           # Upgrade pip
           python3 -m pip install --upgrade pip
+          python3 -m pip install -U sphinx
+          python3 -m pip install sphinx-rtd-theme
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - uses: ammaraskar/sphinx-action@master
+      - name: Make the docs
+        run: |
+          cd docs/
+          make clean
+          make html
+          cd ..
+
+      - name: Standup docs on gh-pages
+        run: |
+          cd docs/_build/html
+          git init
+          touch .nojekyll
+          git add -A
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git commit -m "deploy"
+
+      - name: Push to destination branch
+        uses: ad-m/github-push-action@v0.5.0
         with:
-          docs-folder: "docs/"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          force: true
+          directory: ./docs/_build/html
