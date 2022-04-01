@@ -8,18 +8,27 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-    - name: "Upgrade pip, install requirements"
-      run: |
+      - name: "Upgrade pip, install requirements"
+        run: |
           # Upgrade pip
           python3 -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "docs/"
+      - name: Build docs
+        run: |
+          cd docs/
+          make html
+          cd ..
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub actions bot"
+          git config --global user.email "<>"
+          git commit -am "Built the docs"
+          git push
