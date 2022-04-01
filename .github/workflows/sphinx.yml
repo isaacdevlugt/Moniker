@@ -24,11 +24,14 @@ jobs:
           python3 -m pip install sphinx-rtd-theme
           cd docs/ 
           python3 -m pip install -r requirements.txt
+          cd ..
 
       - name: Make the docs
         run: |
+          cd docs/
           make clean
           make html
+          cd ..
 
       - name: Standup docs on gh-pages
         run: |
