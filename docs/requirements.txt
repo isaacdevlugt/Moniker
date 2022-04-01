@@ -1,7 +1,6 @@
-sphinx>=1.4
-sphinx_rtd_theme
 ipykernel
 nbsphinx
+nbsphinx_link
 pandas
 pandoc
 numpy
