@@ -29,6 +29,9 @@ jobs:
           python3 -m pip install -i https://test.pypi.org/simple/ moniker
           #apt-get install -y pandoc
 
+      - name: Pandoc
+        uses: docker://pandoc/latex:2.11.4
+
       - name: Make the docs
         run: |
           make -C docs/ clean
