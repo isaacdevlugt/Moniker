@@ -2,7 +2,6 @@ ipykernel
 nbsphinx
 nbsphinx_link
 pandas
-pandoc
 numpy>=1.14.5
 matplotlib
 ipynb
