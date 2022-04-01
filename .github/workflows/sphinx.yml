@@ -23,10 +23,10 @@ jobs:
           python3 -m pip install --upgrade setuptools
           python3 -m pip install -U sphinx
           python3 -m pip install sphinx-rtd-theme
-          python3 -m pip install -i https://test.pypi.org/simple/ moniker
           cd docs/ 
-          pip install -r requirements.txt
+          python3 -m pip install -r requirements.txt
           cd ..
+          python3 -m pip install -i https://test.pypi.org/simple/ moniker
           apt-get install -y pandoc
 
       - name: Make the docs
