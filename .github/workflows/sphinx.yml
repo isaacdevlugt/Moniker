@@ -20,19 +20,6 @@ jobs:
           python3 -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-  build:
-    runs-on: ubuntu-latest
-    needs: upgrade
-    steps:
-      - name: Build docs
-        run: |
-          cd docs/
-          make html
-          cd ..
-
-      - name: Commit changes
-        run: |
-          git config --global user.name "GitHub actions bot"
-          git config --global user.email "<>"
-          git commit -am "Built the docs"
-          git push
+      - uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"
